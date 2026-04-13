@@ -33,7 +33,7 @@ Alternatively, you can click the "Run" button at the bottom left corner of your 
 To build the project, use:
 
 ```bash
-$ npm run build
+$ npm run test && npm run build
 ```
 
 Alternatively, you can click the "Run" button at the bottom left corner of your VS Code.
