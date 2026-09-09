@@ -2,12 +2,8 @@ const { readFile, mkdir } = require("fs/promises");
 const { directory } = require("./modules/config");
 const fsExists = require("fs.promises.exists");
 const AdmZip = require("adm-zip");
-const moveFile = require("./modules/moveFiles");
-const zip = new AdmZip();
 
 const run = async () => {
-  const manifest = await readFile("extension/manifest-chrome.json", "utf-8");
-  const { name, version } = JSON.parse(manifest);
   const isZipExists = await fsExists("zip");
 
   if (!isZipExists) {
@@ -15,25 +11,18 @@ const run = async () => {
     console.log("Create zip folder");
   }
 
-  // Build the Chrome extension
-  await moveFile(
-    "extension/manifest-chrome.json",
-    `${directory}/manifest.json`
-  );
-  zip.addLocalFolder(directory);
-  zip.toBuffer();
-  zip.writeZip(`zip/Chrome v${version}.zip`);
-  console.log("🚀 Chrome extension was built");
-
-  // Build the Firefox extension
-  await moveFile(
-    "extension/manifest-firefox.json",
-    `${directory}/manifest.json`
-  );
-  zip.addLocalFolder(directory);
-  zip.toBuffer();
-  zip.writeZip(`zip/Firefox v${version}.zip`);
-  console.log("🚀 Firefox extension was built");
+  for (const browser of ["Chrome", "Firefox"]) {
+    const manifest = await readFile(
+      `extension/manifest-${browser.toLowerCase()}.json`
+    );
+    const { version } = JSON.parse(manifest);
+    const zip = new AdmZip();
+    zip.addLocalFolder(directory);
+    // Replace the manifest only inside this archive, preserving the local build.
+    zip.addFile("manifest.json", manifest);
+    zip.writeZip(`zip/${browser} v${version}.zip`);
+    console.log(`🚀 ${browser} extension was built`);
+  }
 };
 
 run();

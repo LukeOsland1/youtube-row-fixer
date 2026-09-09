@@ -86,8 +86,8 @@ const reflowLayout = (data) => {
   }
 
   const {
-    channelVideoPerRow,
-    channelSlimItemsPerRow,
+    channelPageVideoPerRow,
+    channelPageShelfItemPerRow,
     videoPerRow,
     postPerRow,
     shelfItemPerRow,
@@ -102,8 +102,8 @@ const reflowLayout = (data) => {
 
     if (ele.isChannelPage) {
       setStyleProps({
-        "--ytd-rich-grid-items-per-row": channelVideoPerRow,
-        "--ytd-rich-grid-slim-items-per-row": channelSlimItemsPerRow,
+        "--ytd-rich-grid-items-per-row": channelPageVideoPerRow,
+        "--ytd-rich-grid-slim-items-per-row": channelPageShelfItemPerRow,
       });
     } else {
       setStyleProps({
